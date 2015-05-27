@@ -32,7 +32,7 @@
                 .attr("width",width);
     
     var force = d3.layout.force()
-                          .nodes(nodes)
+                          .nodes(venues)
                           .links([])
                           .size([width,height])
                           .linkDistance([100])
@@ -41,7 +41,7 @@
                           .start();
     
     var nodes = svg.selectAll("circle")
-                    .data(nodes)
+                    .data(venues)
                     .enter()
                     .append("circle")
                     .attr("r",20)
