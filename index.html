@@ -43,7 +43,7 @@
                   {"text":"Westpac Arena, Christchurch"}];
     addColor(venues,"green");
     
-    var data = teams.concat(contries);
+    var data = teams.concat(contries,venues);
     
     var height = 500, width = 1000;
     var svg = d3.select("body")
@@ -52,7 +52,7 @@
                 .attr("width",width);
     
     var force = d3.layout.force()
-                          .nodes(venues)
+                          .nodes(data)
                           .links([])
                           .size([width,height])
                           .linkDistance([100])
@@ -61,7 +61,7 @@
                           .start();
     
     var nodes = svg.selectAll("circle")
-                    .data(venues)
+                    .data(data)
                     .enter()
                     .append("circle")
                     .attr("r",20)
@@ -69,7 +69,7 @@
                     .call(force.drag);
                     
     var texts = svg.selectAll("text")
-                    .data(venues)
+                    .data(data)
                     .enter()
                     .append("text")
                     .attr("fill","black")
