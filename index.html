@@ -20,6 +20,7 @@
                   
     var contries = [{"text":"New Zealand"},
                     {"text":"australian"}];
+    addColor(contries,"blue");
   
     var venues = [{"text":"Adelaide Arena, Adelaide"},
                   {"text":"Arena Manawatu, Palmerston North"},
@@ -77,6 +78,12 @@
             .attr("cy",function(d){return d.y;});
       texts.attr("transform", function(d){return "translate("+d.x+","+d.y+")";})
     })
+    
+    function addColor(data,color){
+      for(var d in data){
+        d.color = color;
+      }
+    }
     
   </script>
   </body>
