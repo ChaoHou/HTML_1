@@ -80,7 +80,7 @@
     })
     
     function addColor(data,color){
-      for(var i in data){
+      for(var i=0;i<data.length;i++){
         data[i].color = color;
       }
       return data;
