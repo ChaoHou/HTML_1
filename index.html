@@ -17,10 +17,11 @@
                   {"text":"Southern Steel"},
                   {"text":"Waikato Bay of Plenty Magic"},
                   {"text":"West Coast Fever"}];
-                  
+    addColor(teams,"red");
+       
     var contries = [{"text":"New Zealand"},
                     {"text":"australian"}];
-    addColor(contries,'blue');
+    addColor(contries,"yellow");
   
     var venues = [{"text":"Adelaide Arena, Adelaide"},
                   {"text":"Arena Manawatu, Palmerston North"},
@@ -40,7 +41,8 @@
                   {"text":"The Edgar Centre, Dunedin"},
                   {"text":"Trusts Stadium, Auckland"},
                   {"text":"Westpac Arena, Christchurch"}];
-              
+    addColor(venues,"green");
+    
     var height = 500, width = 1000;
     var svg = d3.select("body")
                 .append("svg")
@@ -61,7 +63,7 @@
                     .enter()
                     .append("circle")
                     .attr("r",20)
-                    .style("fill","red")
+                    .style("fill",function(d){return d.color})
                     .call(force.drag);
                     
     var texts = svg.selectAll("text")
