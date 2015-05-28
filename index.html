@@ -48,6 +48,10 @@
                     .attr("r",20)
                     .style("fill","red")
                     .call(force.drag);
+    force.on("tick", function(){
+      nodes.attr("cx",function(d){return d.x})
+            .attr("cy",function(d){return d.y});
+    })
     
   </script>
   </body>
