@@ -19,6 +19,9 @@
 		stroke: #000;
 		shape-rendering: crispEdges;
 	}
+	#pool:hover{
+		fill: GoldenRod ;
+	}
 	</style>
   </head>
   <body>
@@ -82,6 +85,7 @@
     		.attr("fill","yellow")
     		.attr("width",poolWidth)
     		.attr("height",height)
+			.attr("id","pool")
 			.on("click",showDetails);
 	
     var force = d3.layout.force()
