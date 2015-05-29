@@ -84,17 +84,17 @@
     var arc = d3.svg.arc()
                     .innerRadius(function(d,i){return 20;})
                     .outerRadius(function(d,i){return 30;})
-                    .startAngle(0)
-                    .endAngle(2 * Math.PI);
+                    .startAngle(-Math.PI)
+                    .endAngle(Math.PI);
     var arcs = gs.append("path")
-                  .attr("fill","red")
+                  //.attr("fill","red")
                   .attr("id", function(d,i){return "s"+i;})
                   .attr("d",arc);
     gs.append("text")
-          .style("font-size",20)
+          .style("font-size",10)
           .attr("dy",function(d,i){return 20;})
           .append("textPath")
-          .attr("textLength",function(d,i){return 90 ;})
+          .attr("textLength",function(d,i){return 180 ;})
           .attr("xlink:href",function(d,i){return "#s"+i;})
           .attr("startOffset",function(d,i){return 3/20;})
           .text(function(d){return d.text;});
