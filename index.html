@@ -5,8 +5,8 @@
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<style>
 	text{
-		pointer-events      : none;
-		cursor  : pointer;
+		pointer-events:none;
+		cursor:pointer;
 	}
 	
 	</style>
@@ -52,7 +52,7 @@
     
     var data = teams.concat(contries,venues);
     
-    var height = 1000, width = 1000;
+    var height = 1000, width = 1000, poolWidth = 100;
     var svg = d3.select("body")
                 .append("svg")
                 .attr("height",height)
@@ -60,6 +60,7 @@
     var pool = svg.append("rect")
     		.attr("x",0)
     		.attr("y",0)
+    		.attr("fill","yellow")
     		.attr("width",poolWidth)
     		.attr("height",height);		
     
