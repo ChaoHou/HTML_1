@@ -57,6 +57,11 @@
                 .append("svg")
                 .attr("height",height)
                 .attr("width",width);
+    var pool = svg.append("rect")
+    		.attr("x",0)
+    		.attr("y",0)
+    		.attr("width",poolWidth)
+    		.attr("height",height);		
     
     var force = d3.layout.force()
                           .nodes(data)
@@ -68,35 +73,35 @@
                           .start();
     
     var nodes = svg.selectAll("circle")
-                    .data(data)
-                    .enter()
-                    .append("circle")
-                    .attr("r",40)
-                    .style("fill",function(d){return d.color})
-                    .call(force.drag);
+			.data(data)
+			.enter()
+			.append("circle")
+			.attr("r",40)
+			.style("fill",function(d){return d.color})
+			.call(force.drag);
     
     var gs = svg.selectAll("g")
-                  .data(data)
-                  .enter()
-                  .append("g");
+		.data(data)
+		.enter()
+		.append("g");
     var arc = d3.svg.arc()
-                    .innerRadius(function(d,i){return 30;})
-                    .outerRadius(function(d,i){return 40;})
-                    .startAngle(-Math.PI*0.5)
-                    .endAngle(Math.PI*1.4);
+		.innerRadius(function(d,i){return 30;})
+		.outerRadius(function(d,i){return 40;})
+		.startAngle(-Math.PI*0.5)
+		.endAngle(Math.PI*1.4);
     var arcs = gs.append("path")
-				  .attr('fill-opacity', '0')
-                  .attr("id", function(d,i){return "s"+i;})
-                  .attr("d",arc);
+		.attr('fill-opacity', '0')
+		.attr("id", function(d,i){return "s"+i;})
+		.attr("d",arc);
     gs.append("text")
-          .style("font-size",10)
-          .attr("dy",function(d,i){return 10;})
-          .append("textPath")
-          .attr("textLength",function(d,i){return 180 ;})
-          .attr("xlink:href",function(d,i){return "#s"+i;})
-          .attr("startOffset",'0%')
-		  .attr("fill","white")
-          .text(function(d){return d.text;})
+	.style("font-size",10)
+	.attr("dy",function(d,i){return 10;})
+	.append("textPath")
+	.attr("textLength",function(d,i){return 180 ;})
+	.attr("xlink:href",function(d,i){return "#s"+i;})
+	.attr("startOffset",'0%')
+	.attr("fill","white")
+	.text(function(d){return d.text;})
 
     force.on("tick", function(){
       nodes.attr("cx",function(d){return d.x;})
