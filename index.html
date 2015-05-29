@@ -2,13 +2,23 @@
 <html lang="en-us">
   <head>
     <title>App</title>
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
 	<style>
 	text{
 		pointer-events:none;
 		cursor:pointer;
 	}
-	
+ 
+	.line {
+		fill: none;
+		stroke: steelblue;
+		stroke-width: 1.5px;
+	}
+	.axis{
+		fill: none;
+		stroke: #000;
+		shape-rendering: crispEdges;
+	}
 	</style>
   </head>
   <body>
@@ -24,11 +34,11 @@
                   {"text":"Southern Steel"},
                   {"text":"Waikato Bay of Plenty Magic"},
                   {"text":"West Coast Fever"}];
-    initArray(teams,"red");
+    initArray(teams,"red","team");
        
-    var contries = [{"text":"New Zealand"},
+    var countries = [{"text":"New Zealand"},
                     {"text":"Australian"}];
-    initArray(contries,"blue");
+    initArray(countries,"blue","country");
   
     var venues = [{"text":"Adelaide Arena, Adelaide"},
                   {"text":"Arena Manawatu, Palmerston North"},
@@ -48,15 +58,24 @@
                   {"text":"The Edgar Centre, Dunedin"},
                   {"text":"Trusts Stadium, Auckland"},
                   {"text":"Westpac Arena, Christchurch"}];
-    initArray(venues,"green");
+    initArray(venues,"green","venue");
     
-    var data = teams.concat(contries,venues);
+    var data = teams.concat(countries,venues);
     
     var height = 700, width = 1200, poolWidth = 100, isStart = false;
     var svg = d3.select("body")
                 .append("svg")
                 .attr("height",height)
-                .attr("width",width);
+                .attr("width",width)
+				.style("position","absolute");
+	var container = d3.select("body")
+					.append("svg")
+					.attr("id","container")
+					.attr("height",height)
+					.attr("width",width)
+					.style("position","absolute")
+					.style("display","none");
+					
     var pool = svg.append("rect")
     		.attr("x",0)
     		.attr("y",0)
@@ -97,14 +116,14 @@
 		.attr("id", function(d,i){return "s"+i;})
 		.attr("d",arc);
     gs.append("text")
-	.style("font-size",10)
-	.attr("dy",function(d,i){return 10;})
-	.append("textPath")
-	.attr("textLength",function(d,i){return 180 ;})
-	.attr("xlink:href",function(d,i){return "#s"+i;})
-	.attr("startOffset",'0%')
-	.attr("fill","white")
-	.text(function(d){return d.text;})
+		.style("font-size",10)
+		.attr("dy",function(d,i){return 10;})
+		.append("textPath")
+		.attr("textLength",function(d,i){return 180 ;})
+		.attr("xlink:href",function(d,i){return "#s"+i;})
+		.attr("startOffset",'0%')
+		.attr("fill","white")
+		.text(function(d){return d.text;})
 	
     force.on("tick", function(e){
       nodes.each(function(d){
@@ -112,19 +131,21 @@
 			d.x += (50-d.x)*0.8;
 		}
 	  })
-			.attr("cx",function(d){return d.x;})
-            .attr("cy",function(d){return d.y;});
+		.attr("cx",function(d){return d.x;})
+		.attr("cy",function(d){return d.y;});
       gs.attr("transform", function(d){return "translate("+d.x+","+d.y+")";});
     })
 	
-    function initArray(data,color){
+    function initArray(data,color,type){
       for(var i=0;i<data.length;i++){
         data[i].color = color;
+		data[i].type = type;
       }
       return data;
     }
     
 	var Pad = function(container){
+		
 		this.background = container.append("rect")
 									.attr("x",0)
 									.attr("y",0)
@@ -132,7 +153,7 @@
 									.attr("width",width)
 									.attr("height",height)
 									.attr("id","background")
-									.style("display","none");
+									//.style("display","none");
 									
 		this.closeButton = container.append("circle")
 									.attr("cx",width-200)
@@ -140,30 +161,86 @@
 									.attr("r",20)
 									.attr("id","closeButton")
 									.attr("fill","red")
-									.style("display","none")
+									//.style("display","none")
 									.on("mousedown",function(){
-										document.getElementById("closeButton").style.display = "none";
-										document.getElementById("background").style.display = "none"
+										container.style("display","none");
 									});
 		
-		this.open = function(){
-			this.background.style("display","block");
-			this.closeButton.style("display","block");
+		this.open = function(nodes){
+			container.selectAll(".graph").remove();
+			container.style("display","block");
+			if(nodes.length == 1){
+				display(nodes[0]);
+			}
 		};
 		
 		this.close = function(){
-			this.background.style("display","none");
-			this.closeButton.style("display","none");
+			container.style("display","none");
 		};
 	};
 	
-	
-	var pad = new Pad(svg);
+	var pad = new Pad(container);
 	
 	function showDetails(){
-		pad.open();
+		var pending = [];
+		for(var i=0;i<data.length;i++){
+			if(data[i].x<100){
+				pending.push(data[i]);
+			}
+		}
+		pad.open(pending);
 	}
+	
+	function display(node){
+		if(node.type == "team"){
+			lineChart(node);
+		}else if(node.type == "country"){
+			alert("country");
+		}
+	}
+	
+    var tpData = [{round:0,points:0},
+                  {round:1,points:2},
+                  {round:2,points:2},
+                  {round:3,points:4},
+                  {round:4,points:6},
+                  {round:5,points:6},
+                  {round:6,points:6},
+                  {round:7,points:8},
+                  {round:8,points:10},
+                  {round:9,points:10},
+                  {round:10,points:12},
+                  {round:11,points:14},
+                  {round:12,points:16},
+                  {round:13,points:18},
+                  {round:14,points:20}];
     
+	function lineChart(data){
+		var margin = {top:20,right:20,bottom:20,left:100},
+			width = 1000 - margin.left - margin.right,
+			height = 480;
+		var x = d3.scale.linear().domain([0,14]).range([0, width]);
+		var y = d3.scale.linear().domain([0,20]).range([height, 0]);
+		var xAxis = d3.svg.axis().scale(x).orient("bottom");
+		var yAxis = d3.svg.axis().scale(y).orient("left");
+		var line = d3.svg.line()
+							.x(function(d) { return x(d.round); })
+							.y(function(d) { return y(d.points); });
+		container.append("g")
+					.attr("class","axis graph")
+					.attr("transform","translate("+margin.left+","+(height+margin.top)+")")
+					.call(xAxis);
+		container.append("g")
+					.attr("class","axis graph")
+					.attr("transform","translate("+margin.left+","+margin.top+")")
+					.call(yAxis)
+		
+		container.append("path")
+					.attr("class","line graph")
+					.attr("d",line(data))
+					.attr("transform","translate("+margin.left+","+margin.top+")");
+	}
+	
   </script>
   </body>
 </html>
