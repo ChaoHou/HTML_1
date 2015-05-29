@@ -104,20 +104,19 @@
 	.attr("fill","white")
 	.text(function(d){return d.text;})
 
-    force.on("dragend",function(d,i){
-    	if(d.x<poolWidth){
-    		//d.fixed = false;
-    	}else{
-    		//d.fixed = false;
-    	}
-    })
-
     force.on("tick", function(){
       nodes.attr("cx",function(d){return d.x;})
             .attr("cy",function(d){return d.y;});
       gs.attr("transform", function(d){return "translate("+d.x+","+d.y+")";});
+    })
+	force.drag().on("dragend",function(d,i){
+    	if(d.x<poolWidth){
+    		d.fixed = true;
+    	}else{
+    		d.fixed = false;
+    	}
     });
-    
+	
     function addColor(data,color){
       for(var i=0;i<data.length;i++){
         data[i].color = color;
