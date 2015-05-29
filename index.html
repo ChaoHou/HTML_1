@@ -52,7 +52,7 @@
     
     var data = teams.concat(contries,venues);
     
-    var height = 1000, width = 1000, poolWidth = 100;
+    var height = 700, width = 1200, poolWidth = 100, isStart = false;
     var svg = d3.select("body")
                 .append("svg")
                 .attr("height",height)
@@ -79,7 +79,8 @@
 			.append("circle")
 			.attr("r",40)
 			.style("fill",function(d){return d.color})
-			.call(force.drag);
+			.call(force.drag)
+			.on("mousedown",function(){isStart = true;});
     
     var gs = svg.selectAll("g")
 		.data(data)
@@ -106,8 +107,8 @@
 
     force.on("tick", function(e){
       nodes.each(function(d){
-		if(d.x<100){
-			d.x += (50-d.x)*0.5;
+		if(d.x<100 && isStart){
+			d.x += (50-d.x)*0.8;
 		}
 	  })
 			.attr("cx",function(d){return d.x;})
