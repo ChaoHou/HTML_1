@@ -77,18 +77,22 @@
                     .attr("font-size", "10px")
                     .text(function(d){return d.text;}); 
     
+    var defs = svg.selectAll("defs")
+                  .data(data)
+                  .enter()
+                  .append("defs");
     var arc = d3.svg.arc()
                     .innerRadius(function(d,i){return 20;})
                     .outerRadius(function(d,i){return 30;})
                     .startAngle(0)
                     .endAngle(2 * Math.PI);
-    var arcs = svg.append("path")
+    var arcs = defs.append("path")
                   .attr("fill","red")
                   .attr("id", function(d,i){return "s"+i;})
                   .attr("d",arc);
-    var gs = svg.append("g")
+    var gs = defs.append("g")
                 .style("fill","navy");
-    gs.append("text")
+    defs.append("text")
           .style("font-size",20)
           .attr("dy",function(d,i){return 20;})
           .append("textPath")
