@@ -62,8 +62,9 @@
     		.attr("y",0)
     		.attr("fill","yellow")
     		.attr("width",poolWidth)
-    		.attr("height",height);		
-    
+    		.attr("height",height)
+			.on("click",showDetails);
+	
     var force = d3.layout.force()
                           .nodes(data)
                           .links([])
@@ -104,7 +105,7 @@
 	.attr("startOffset",'0%')
 	.attr("fill","white")
 	.text(function(d){return d.text;})
-
+	
     force.on("tick", function(e){
       nodes.each(function(d){
 		if(d.x<100 && isStart){
@@ -123,22 +124,45 @@
       return data;
     }
     
+	var Pad = function(container){
+		this.background = container.append("rect")
+									.attr("x",0)
+									.attr("y",0)
+									.attr("fill","white")
+									.attr("width",width)
+									.attr("height",height)
+									.attr("id","background")
+									.style("display","none");
+									
+		this.closeButton = container.append("circle")
+									.attr("cx",width-200)
+									.attr("cy",100)
+									.attr("r",20)
+									.attr("id","closeButton")
+									.attr("fill","red")
+									.style("display","none")
+									.on("mousedown",function(){
+										document.getElementById("closeButton").style.display = "none";
+										document.getElementById("background").style.display = "none"
+									});
+		
+		this.open = function(){
+			this.background.style("display","block");
+			this.closeButton.style("display","block");
+		};
+		
+		this.close = function(){
+			this.background.style("display","none");
+			this.closeButton.style("display","none");
+		};
+	};
 	
-    var tpData = [{round:0,points:0},
-                  {round:1,points:2},
-                  {round:2,points:2},
-                  {round:3,points:4},
-                  {round:4,points:6},
-                  {round:5,points:6},
-                  {round:6,points:6},
-                  {round:7,points:8},
-                  {round:8,points:10},
-                  {round:9,points:10},
-                  {round:10,points:12},
-                  {round:11,points:14},
-                  {round:12,points:16},
-                  {round:13,points:18},
-                  {round:14,points:20}];
+	
+	var pad = new Pad(svg);
+	
+	function showDetails(){
+		pad.open();
+	}
     
   </script>
   </body>
