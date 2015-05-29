@@ -24,11 +24,11 @@
                   {"text":"Southern Steel"},
                   {"text":"Waikato Bay of Plenty Magic"},
                   {"text":"West Coast Fever"}];
-    addColor(teams,"red");
+    initArray(teams,"red");
        
     var contries = [{"text":"New Zealand"},
                     {"text":"Australian"}];
-    addColor(contries,"blue");
+    initArray(contries,"blue");
   
     var venues = [{"text":"Adelaide Arena, Adelaide"},
                   {"text":"Arena Manawatu, Palmerston North"},
@@ -48,7 +48,7 @@
                   {"text":"The Edgar Centre, Dunedin"},
                   {"text":"Trusts Stadium, Auckland"},
                   {"text":"Westpac Arena, Christchurch"}];
-    addColor(venues,"green");
+    initArray(venues,"green");
     
     var data = teams.concat(contries,venues);
     
@@ -68,8 +68,8 @@
                           .nodes(data)
                           .links([])
                           .size([width,height])
-                          .linkDistance([100])
-                          .charge([-1000])
+                          .linkDistance([80])
+                          .charge([-1200])
                           .gravity(0.3)
                           .start();
     
@@ -104,20 +104,18 @@
 	.attr("fill","white")
 	.text(function(d){return d.text;})
 
-    force.on("tick", function(){
-      nodes.attr("cx",function(d){return d.x;})
+    force.on("tick", function(e){
+      nodes.each(function(d){
+		if(d.x<100){
+			d.x += (50-d.x)*0.5;
+		}
+	  })
+			.attr("cx",function(d){return d.x;})
             .attr("cy",function(d){return d.y;});
       gs.attr("transform", function(d){return "translate("+d.x+","+d.y+")";});
     })
-	force.drag().on("dragend",function(d,i){
-    	if(d.x<poolWidth){
-    		d.fixed = true;
-    	}else{
-    		d.fixed = false;
-    	}
-    });
 	
-    function addColor(data,color){
+    function initArray(data,color){
       for(var i=0;i<data.length;i++){
         data[i].color = color;
       }
