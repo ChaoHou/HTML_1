@@ -156,8 +156,8 @@
 									//.style("display","none");
 									
 		this.closeButton = container.append("circle")
-									.attr("cx",width-200)
-									.attr("cy",100)
+									.attr("cx",width-50)
+									.attr("cy",50)
 									.attr("r",20)
 									.attr("id","closeButton")
 									.attr("fill","red")
@@ -165,11 +165,17 @@
 									.on("mousedown",function(){
 										container.style("display","none");
 									});
+		container.append("text")
+					.attr("x",width-55)
+					.attr("y",55)
+					.attr("font-size",15)
+					.text("X")
 		
 		this.open = function(nodes){
 			container.selectAll(".graph").remove();
-			container.style("display","block");
+			
 			if(nodes.length == 1){
+				container.style("display","block");
 				display(nodes[0]);
 			}
 		};
