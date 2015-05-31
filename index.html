@@ -19,6 +19,10 @@
 		stroke: #000;
 		shape-rendering: crispEdges;
 	}
+	.arc path {
+		stroke: white;
+		stroke-width: 2px;
+	}
 	#pool:hover{
 		fill: GoldenRod ;
 	}
@@ -207,7 +211,10 @@
 			
 			if(nodes.length == 1){
 				container.style("display","block");
-				display(nodes[0]);
+				displayOne(nodes[0]);
+			}else if(nodes.length == 2){
+				container.style("display","block");
+				displayTwo(nodes[0],nodes[1]);
 			}
 		};
 		
@@ -228,13 +235,19 @@
 		pad.open(pending);
 	}
 	
-	function display(node){
+	function displayOne(node){
 		if(node.type == "team"){
-			var data = [{"data":tpData,"color":"red"}];
-			lineChart(node,data);
+			var data1 = [{"data":tpData,"color":"red"}];
+			lineChart(node,data1);
 		}else if(node.type == "country"){
-			var data = [{"data":tpData,"color":"red"},{"data":tdData,"color":"blue"}];
-			lineChart(node,data);
+			var data2 = [{"data":tpData,"color":"red"},{"data":tdData,"color":"blue"}];
+			lineChart(node,data2);
+		}
+	}
+	
+	function displayTwo(node1,node2){
+		if(node1.type=='team' && node2.type=='venue'){
+			pieChart(pieData);
 		}
 	}
 	
@@ -298,6 +311,32 @@
 						.attr("stroke-width",2)
 						.attr("transform","translate("+margin.left+","+margin.top+")");
 		}
+	}
+	
+	pieData =  [{"text":"win","percentage":66,"color":"DarkSeaGreen"},
+				{"text":"lose","percentage":34,"color":"LightSalmon"}];
+				
+	function pieChart(data){
+		var arc = d3.svg.arc()
+						.outerRadius(200)
+						.innerRadius(0);
+		var pie = d3.layout.pie()
+					.sort(null)
+					.value(function(d){return d.percentage})
+		var g = container.selectAll(".arc")
+						.data(pie(data))
+						.enter()
+						.append("g")
+						.attr("transform","translate(500,250)")
+						.attr("class","arc");
+		g.append("path")
+			.attr("d", arc)
+			.style("fill",function(d){return d.data.color});
+		g.append("text")
+		  .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+		  .attr("dy", ".35em")
+		  .style("text-anchor", "middle")
+		  .text(function(d) { return d.data.text+":"+d.data.percentage+"%"; });
 	}
 	
   </script>
