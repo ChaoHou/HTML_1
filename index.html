@@ -63,7 +63,15 @@
                   {"text":"Westpac Arena, Christchurch","title":"WA"}];
     initArray(venues,"green","venue");
     
-    var data = teams.concat(countries,venues);
+	var years = [{"title":2008},
+				 {"title":2009},
+				 {"title":2010},
+				 {"title":2011},
+				 {"title":2012},
+				 {"title":2013}]
+	initArray(years,"purple","year");
+	
+    var data = teams.concat(countries,venues,years);
     
     var height = 700, width = 1200, poolWidth = 100, isStart = false;
     var svg = d3.select("body")
@@ -96,13 +104,19 @@
 						.attr("fill","black")
 						.attr("font-family","sans-serif")
 						.attr("font-size", "15px")
-						.attr("x",900)
+						.attr("x",function(d,i){
+							if(d.type != "year"){
+								return 900;
+							}
+						})
 						.attr("y",function(d,i){
 							var base = 100+i*15
-							if(d.type=='country'){
+							if(d.type=="country"){
 								base += 10;
-							}else if(d.type=='venue'){
+							}else if(d.type=="venue"){
 								base += 20;
+							}else if(d.type=="year"){
+								return;
 							}
 							return base;
 						
