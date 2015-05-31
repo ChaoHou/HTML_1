@@ -141,13 +141,13 @@
 	
     force.on("tick", function(e){
       nodes.each(function(d){
-		if(d.x<100 && isStart){
-			d.x += (50-d.x)*0.8;
+		if(d.x-100<100 && isStart){
+			d.x += (150-d.x)*0.8;
 		}
 	  })
-		.attr("cx",function(d){return d.x;})
+		.attr("cx",function(d){return d.x-100;})
 		.attr("cy",function(d){return d.y;});
-      texts.attr("transform", function(d){return "translate("+(d.x-20)+","+(d.y+10)+")";});
+      texts.attr("transform", function(d){return "translate("+(d.x-120)+","+(d.y+10)+")";});
     })
 	
     function initArray(data,color,type){
@@ -204,7 +204,7 @@
 	function showDetails(){
 		var pending = [];
 		for(var i=0;i<data.length;i++){
-			if(data[i].x<100){
+			if(data[i].x-100<100){
 				pending.push(data[i]);
 			}
 		}
