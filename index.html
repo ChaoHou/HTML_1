@@ -27,40 +27,40 @@
   <body>
   <script>
     
-    var teams =  [{"text":"Adelaide Thunderbirds"},
-                  {"text":"Canterbury Tactix"},
-                  {"text":"Central Pulse"},
-                  {"text":"Melbourne Vixens"},
-                  {"text":"New South Wales Swifts"},
-                  {"text":"Northern Mystics"},
-                  {"text":"Queensland Firebirds"},
-                  {"text":"Southern Steel"},
-                  {"text":"Waikato Bay of Plenty Magic"},
-                  {"text":"West Coast Fever"}];
+    var teams =  [{"text":"Adelaide Thunderbirds","title":"AT"},
+                  {"text":"Canterbury Tactix","title":"CT"},
+                  {"text":"Central Pulse","title":"CP"},
+                  {"text":"Melbourne Vixens","title":"MV"},
+                  {"text":"New South Wales Swifts","title":"NS"},
+                  {"text":"Northern Mystics","title":"NM"},
+                  {"text":"Queensland Firebirds","title":"QF"},
+                  {"text":"Southern Steel","title":"SS"},
+                  {"text":"Waikato Bay of Plenty Magic","title":"WB"},
+                  {"text":"West Coast Fever","title":"WCF"}];
     initArray(teams,"red","team");
        
-    var countries = [{"text":"New Zealand"},
-                    {"text":"Australian"}];
+    var countries = [{"text":"New Zealand","title":"NZ"},
+                    {"text":"Australian","title":"AU"}];
     initArray(countries,"blue","country");
   
-    var venues = [{"text":"Adelaide Arena, Adelaide"},
-                  {"text":"Arena Manawatu, Palmerston North"},
-                  {"text":"Brisbane Convention and Exhibition Centre"},
-                  {"text":"Challenge Stadium, Perth"},
-                  {"text":"ETSA Park, Adelaide"},
-                  {"text":"Energy Events Centre, Rotorua"},
-                  {"text":"Hisense Arena, Melbourne"},
-                  {"text":"Mystery Creek Events Centre, Hamilton"},
-                  {"text":"North Shore Events Centre, Auckland"},
-                  {"text":"Queen Elizabeth Youth Centre, Tauranga"},
-                  {"text":"Stadium Southland, Invercargill"},
-                  {"text":"State Netball and Hockey Centre, Melbourne"},
-                  {"text":"Sydney Olympic Park Sports Centre"},
-                  {"text":"TSB Bank Arena, Wellington"},
-                  {"text":"Te Rauparaha Arena, Porirua"},
-                  {"text":"The Edgar Centre, Dunedin"},
-                  {"text":"Trusts Stadium, Auckland"},
-                  {"text":"Westpac Arena, Christchurch"}];
+    var venues = [{"text":"Adelaide Arena, Adelaide","title":"AAA"},
+                  {"text":"Arena Manawatu, Palmerston North","title":"AM"},
+                  {"text":"Brisbane Convention and Exhibition Centre","title":"BC"},
+                  {"text":"Challenge Stadium, Perth","title":"CS"},
+                  {"text":"ETSA Park, Adelaide","title":"EP"},
+                  {"text":"Energy Events Centre, Rotorua","title":"EEC"},
+                  {"text":"Hisense Arena, Melbourne","title":"HA"},
+                  {"text":"Mystery Creek Events Centre, Hamilton","title":"MC"},
+                  {"text":"North Shore Events Centre, Auckland","title":"NSE"},
+                  {"text":"Queen Elizabeth Youth Centre, Tauranga","title":"QE"},
+                  {"text":"Stadium Southland, Invercargill","title":"SSI"},
+                  {"text":"State Netball and Hockey Centre, Melbourne","title":"SN"},
+                  {"text":"Sydney Olympic Park Sports Centre","title":"SO"},
+                  {"text":"TSB Bank Arena, Wellington","title":"TB"},
+                  {"text":"Te Rauparaha Arena, Porirua","title":"TR"},
+                  {"text":"The Edgar Centre, Dunedin","title":"TE"},
+                  {"text":"Trusts Stadium, Auckland","title":"TS"},
+                  {"text":"Westpac Arena, Christchurch","title":"WA"}];
     initArray(venues,"green","venue");
     
     var data = teams.concat(countries,venues);
@@ -106,28 +106,25 @@
 			.call(force.drag)
 			.on("mousedown",function(){isStart = true;});
     
-    var gs = svg.selectAll("g")
-		.data(data)
-		.enter()
-		.append("g");
-    var arc = d3.svg.arc()
-		.innerRadius(function(d,i){return 30;})
-		.outerRadius(function(d,i){return 40;})
-		.startAngle(-Math.PI*0.5)
-		.endAngle(Math.PI*1.4);
-    var arcs = gs.append("path")
-		.attr('fill-opacity', '0')
-		.attr("id", function(d,i){return "s"+i;})
-		.attr("d",arc);
-    gs.append("text")
-		.style("font-size",10)
-		.attr("dy",function(d,i){return 10;})
-		.append("textPath")
-		.attr("textLength",function(d,i){return 180 ;})
-		.attr("xlink:href",function(d,i){return "#s"+i;})
-		.attr("startOffset",'0%')
-		.attr("fill","white")
-		.text(function(d){return d.text;})
+	var texts = svg.selectAll("text")
+				.data(data)
+				.enter()
+				.append("text")
+				.attr("fill","white")
+				.attr("font-family","sans-serif")
+				.attr("font-size", "30px")
+				.text(function(d){return d.title;}); 
+	
+	var descriptions = svg.selectAll("text")
+						.data(data)
+						.enter()
+						.append("text")
+						.attr("fill","black")
+						.attr("font-family","sans-serif")
+						.attr("font-size", "20px")
+						.attr("x",100)
+						.attr("y",200)
+						.text(function(d){return d.title + " : " + d.text;})
 	
     force.on("tick", function(e){
       nodes.each(function(d){
@@ -137,7 +134,7 @@
 	  })
 		.attr("cx",function(d){return d.x;})
 		.attr("cy",function(d){return d.y;});
-      gs.attr("transform", function(d){return "translate("+d.x+","+d.y+")";});
+      texts.attr("transform", function(d){return "translate("+(d.x-20)+","+(d.y+10)+")";});
     })
 	
     function initArray(data,color,type){
